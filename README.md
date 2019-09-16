@@ -7,7 +7,7 @@
 1. Extract the contents of the app folder to your choice of web server directory.
 
 2. Modify the config.ini in the includes folder to include MySQL login credentials,
-you can choose whether to use an existing database or notes.
+you can choose whether to use an existing database or not.
 
 3. Visit the web directory in a web browser to trigger the installation.
 
