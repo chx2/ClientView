@@ -1,0 +1,34 @@
+Don't delete me, I'm used during the installation!
+
+Steps to install(Personal Computer)
+
+1. Install WAMP ->  http://www.wampserver.com/en/
+
+2. Once installed, run WAMP(Can run it from search bar)
+
+3. Extract the zip contents to C:\wamp64\www
+
+4. Open your browser of choice & type in localhost/clients(Note, you wil use this url to access this app in the future)
+
+5. Follow the steps to complete installation
+
+Steps to install(Web Server)
+
+1. Extract ZIP contents to whatever folder you are going to point
+
+2. Edit config.ini under the includes/ folder to use the correct hostname, user, and password for the db connection
+
+3. Visit the home url for the new pointer 
+
+4. Follow the steps to complete installation 
+
+FAQ
+
+Q. I'm stuck on the installation screen!
+A. Look for lines with red text for errors, google accordingly to fix said error 
+
+Q. Something messed up during installation, how to I restart?
+A. Before you revisit the home page to run installation, make sure: 
+	1. There is an install.txt file in the home directory, there is a backup in the install/ directory if it has been deleted 
+	2. Delete the 'clients' database if it has been created
+	
