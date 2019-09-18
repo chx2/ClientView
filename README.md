@@ -1,5 +1,5 @@
 # ClientView
- A simple web application for storing client notes & contact information.
+ A simple web application for storing client notes & contact information. [Click for demo](https://chrish.me)
 
 ## How to install ClientView
 
