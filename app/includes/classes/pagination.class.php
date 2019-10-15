@@ -14,12 +14,12 @@ class Paginator extends Client {
   protected $pages;
   protected $page;
 
-  public function __construct($records, $limit = 10) {
+  public function __construct($records, $page, $limit = 10) {
     parent::__construct(false);
     $this->limit = $limit;
     $this->records = $records;
-    $this->page =  ($this->pages > 1) ? $this->pages : 1;
-    $this->pages = ceil($this->page / $this->limit);
+    $this->page = $page;
+    $this->pages = ceil($this->records / $this->limit);
   }
 
   //Return data on offset number of users

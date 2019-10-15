@@ -25,7 +25,8 @@
 
       //Get variables, pass dummy value if nothing exists
       $single = $_GET['id'] ?? false;
-      $page = new Paginator($records);
+      $curpage = $_GET['page'] ?? 1;
+      $page = new Paginator($records,$curpage);
 
       //Individual record edit
       if ($single) {
