@@ -118,6 +118,8 @@ $(document).ready(function(){
 
     e.preventDefault();
 
+    M.toast({html: 'Preparing...', classes: 'green'});
+
     $.ajax({
       type: 'post',
       url: 'process.php',
