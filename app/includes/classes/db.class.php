@@ -19,6 +19,7 @@ class db {
 		$this->connection->set_charset($charset);
 	}
 
+  //Run query
   public function query($query) {
 	if ($this->query = $this->connection->prepare($query)) {
           if (func_num_args() > 1) {
@@ -51,6 +52,7 @@ class db {
      return $this;
   }
 
+  //Fetch many results
 	public function fetchAll() {
 	    $params = array();
 	    $meta = $this->query->result_metadata();
@@ -70,6 +72,7 @@ class db {
 		return $result;
 	}
 
+  //Fetch one results
 	public function fetchArray() {
 	    $params = array();
 	    $meta = $this->query->result_metadata();
@@ -87,19 +90,23 @@ class db {
 		return $result;
 	}
 
+  //Number of Rows
 	public function numRows() {
 		$this->query->store_result();
 		return $this->query->num_rows;
 	}
 
+  //Close connection
 	public function close() {
 		return $this->connection->close();
 	}
 
+  //Get rows affected
 	public function affectedRows() {
 		return $this->query->affected_rows;
 	}
 
+  //Type
 	private function _gettype($var) {
 	    if(is_string($var)) return 's';
 	    if(is_float($var)) return 'd';

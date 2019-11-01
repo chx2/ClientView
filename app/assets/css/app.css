@@ -4,6 +4,10 @@
   --focus: #4CAF50 !important;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html,
 body {
     min-height: 100%;
@@ -68,8 +72,9 @@ body {
 
 .cover {
   position: absolute;
-  height:100%;
-  width:100%;
+  top: 0;
+  height: 100vh;
+  width: 100vw;
   background:white;
   z-index: 1;
   display: flex;

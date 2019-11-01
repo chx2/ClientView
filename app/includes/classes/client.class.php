@@ -1,20 +1,24 @@
 <?php
 class Client {
 
+  //Store input values
   protected $action;
   protected $data;
   protected $field;
 
+  //Get config variables
   protected $filesize;
   protected $db;
 
   public function __construct($data = true) {
+    //Scrub before being stored as object
     if ($data) {
       $this->data = array_map('htmlspecialchars',filter_input_array(INPUT_POST));
       if (isset($this->data['action'])) {
         $keys = array_keys($this->data);
         $this->field = $keys[1];
       }
+      //Get action value
       else {
         $this->action = end($this->data) ?: '';
     		array_pop($this->data);
@@ -23,6 +27,7 @@ class Client {
 
     $config = parse_ini_file(realpath('includes/config.ini'));
 
+    //DB instance
     $this->filesize = $config['filesize'];
     $this->db = new db(
       $config['host'],
@@ -32,16 +37,19 @@ class Client {
     );
   }
 
+  //Number of clients
   public function count() {
     $count = $this->db->query('SELECT COUNT(*) as count FROM client')->fetchArray();
     return $count['count'];
   }
 
+  //Call class function based on input action value
   public function serve() {
     $function = $this->action;
     call_user_func(array($this,$function));
   }
 
+  //Record edit, pure ajax
   public function quickEdit() {
     if ($this->data['action'] == 'edit') {
       $this->db->query('UPDATE client SET '.$this->field.' = ? WHERE id = ?',$this->data[$this->field],$this->data['id']);
@@ -51,6 +59,7 @@ class Client {
     }
   }
 
+  //Add user
   private function add() {
     $name = $this->data['name'] ?: 'N/A';
     $address = $this->data['address'] ?: 'N/A';
@@ -67,6 +76,7 @@ class Client {
     );
   }
 
+  //Export to CSV
   private function export() {
     header("Content-Type: text/csv");
     header("Content-Disposition: attachment; filename=file.csv");
@@ -74,29 +84,48 @@ class Client {
     toCSV($clients);
   }
 
+  //Import CSV
   private function import() {
     if (isset($_FILES['file'])) {
+      //Sometimes saved as a different extension across different systems
       $mimes = array('application/vnd.ms-excel','text/plain','text/csv','text/tsv');
       if(in_array($_FILES['file']['type'],$mimes)){
         $file = $_FILES['file']['tmp_name'];
+        //Filesize specified in config
         if ($_FILES['file']['size'] > $this->filesize) {
           echo 'Error, max filesize has exceeded application limit of '. $this->filesize / 1000  .'KB';
         }
         else {
           $file = array_map('str_getcsv', file($file));
-          foreach($file as $entry) {
-            $this->db->query('
-              INSERT INTO
-                client (name,address,company,title,email,telephone,notes)
-              VALUES (?,?,?,?,?,?,?)',
-              $entry[0],$entry[1],$entry[2],$entry[3],$entry[4],$entry[5],$entry[6]
-            );
+          $count = 1;
+          $isValid = true;
+          //Validate each line
+          foreach($file as $check) {
+            if (count($check) !== 7) {
+              $isValid = false;
+              break;
+            }
+            $count++;
           }
-          echo 'Upload complete';
+          //If format is good, add everything
+          if ($isValid) {
+            foreach($file as $entry) {
+              $this->db->query('
+                INSERT INTO
+                  client (name,address,company,title,email,telephone,notes)
+                VALUES (?,?,?,?,?,?,?)',
+                $entry[0],$entry[1],$entry[2],$entry[3],$entry[4],$entry[5],$entry[6]
+              );
+            }
+            echo 'Upload complete';
+          }
+          else {
+            echo 'Import failed: invalid data format on line '.$count;
+          }
         }
       }
       else {
-        echo 'Error, uploaded file is missing or not in valid CSV format';
+        echo 'Error, uploaded file is missing or not a valid CSV file';
       }
     }
     else {
@@ -104,6 +133,7 @@ class Client {
     }
   }
 
+  //User login
   private function login() {
     $email = $this->data['email'];
     $password = $this->data['password'];
@@ -130,6 +160,7 @@ class Client {
     }
   }
 
+  //Register user
   private function register() {
     $email = $this->data['email'];
     $password = password_hash($this->data['password'], PASSWORD_DEFAULT);
@@ -142,11 +173,13 @@ class Client {
     );
     $_SESSION['msg'] = 'Your account has been created!';
     $_SESSION['type'] = 'green';
+    //Remove register and install file from home directory if first-time
     @unlink(__DIR__ . '/../../install.txt');
     @unlink(__DIR__ . '/../../register.php');
     header('Location: login.php');
   }
 
+  //User search
   private function search() {
     $name = $this->data['name'] ?: 'N/A';
     $name = "'%".$name."%'";
@@ -165,6 +198,7 @@ class Client {
     echo json_encode($client);
   }
 
+  //Update user, manual
   private function update() {
     $id = $this->data['id'];
     $name = $this->data['name'] ?: 'N/A';

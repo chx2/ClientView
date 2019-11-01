@@ -32,7 +32,7 @@
   <body>
     <div class="cover">
       <div class="preloader-wrapper active">
-        <div class="spinner-layer spinner-red-only">
+        <div class="spinner-layer spinner-blue-only">
           <div class="circle-clipper left">
             <div class="circle"></div>
           </div><div class="gap-patch">

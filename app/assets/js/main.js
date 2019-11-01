@@ -3,11 +3,11 @@ $(document).ready(function(){
   //Preloader
   var path = window.location.pathname;
   var end = path.split("/");
-  if(end[end.length-1] == 'dashboard') {
+  if(end[end.length-1] == 'dashboard.php') {
     $('.cover').fadeOut(2000);
   }
   else {
-    $('.cover').fadeOut();
+    $('.cover').fadeOut('slow');
   }
 
   //Materialize Init
@@ -98,6 +98,8 @@ $(document).ready(function(){
   $('.importdata').on('submit', function (e) {
 
     e.preventDefault();
+
+    M.toast({html: 'Importing...', classes: 'orange'});
 
     $.ajax({
       type: 'post',
