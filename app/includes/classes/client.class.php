@@ -96,7 +96,7 @@ class Client {
         }
       }
       else {
-        echo 'Error, uploaded file is not in valid CSV format';
+        echo 'Error, uploaded file is missing or not in valid CSV format';
       }
     }
     else {

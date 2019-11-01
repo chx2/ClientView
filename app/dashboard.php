@@ -12,7 +12,7 @@
   if (isset($_SESSION['user'])) {
 
     view('header');
-      block('nav');
+    view('nav');
     view('dashboard');
       block('add');
       block('import');

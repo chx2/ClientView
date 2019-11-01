@@ -81,7 +81,5 @@ function view($template) {
 */
 function block($template) {
   //Access globals except for any GET or POST data
-  global $title;
-  global $records;
   include 'views/blocks/'.$template.'.php';
 }

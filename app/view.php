@@ -43,7 +43,7 @@
       }
 
       view('header');
-        block('nav');
+      view('nav');
         //Edit specific user record
         if ($single):
           view('viewuser');
