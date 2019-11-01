@@ -5,6 +5,7 @@ class Client {
   protected $data;
   protected $field;
 
+  protected $filesize;
   protected $db;
 
   public function __construct($data = true) {
@@ -22,6 +23,7 @@ class Client {
 
     $config = parse_ini_file(realpath('includes/config.ini'));
 
+    $this->filesize = $config['filesize'];
     $this->db = new db(
       $config['host'],
       $config['username'],
@@ -70,6 +72,36 @@ class Client {
     header("Content-Disposition: attachment; filename=file.csv");
     $clients = $this->db->query('SELECT name,address,company,title,email,telephone,notes FROM client')->fetchAll();
     toCSV($clients);
+  }
+
+  private function import() {
+    if (isset($_FILES['file'])) {
+      $mimes = array('application/vnd.ms-excel','text/plain','text/csv','text/tsv');
+      if(in_array($_FILES['file']['type'],$mimes)){
+        $file = $_FILES['file']['tmp_name'];
+        if ($_FILES['file']['size'] > $this->filesize) {
+          echo 'Error, max filesize has exceeded application limit of '. $this->filesize / 1000  .'KB';
+        }
+        else {
+          $file = array_map('str_getcsv', file($file));
+          foreach($file as $entry) {
+            $this->db->query('
+              INSERT INTO
+                client (name,address,company,title,email,telephone,notes)
+              VALUES (?,?,?,?,?,?,?)',
+              $entry[0],$entry[1],$entry[2],$entry[3],$entry[4],$entry[5],$entry[6]
+            );
+          }
+          echo 'Upload complete';
+        }
+      }
+      else {
+        echo 'Error, uploaded file is not in valid CSV format';
+      }
+    }
+    else {
+      echo 'No files received';
+    }
   }
 
   private function login() {

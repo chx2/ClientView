@@ -89,6 +89,30 @@ $(document).ready(function(){
     });
   });
 
+  //Open import menu
+  $('.import').on('click', function(e) {
+    $('#import').modal('open').find('input').eq(0).focus();
+  });
+
+  //Send input csv data
+  $('.importdata').on('submit', function (e) {
+
+    e.preventDefault();
+
+    $.ajax({
+      type: 'post',
+      url: 'process.php',
+      data: new FormData($('.importdata')[0]),
+      cache: false,
+      contentType: false,
+      processData: false,
+      success: function (e) {
+        M.toast({html: e, classes: 'orange'});
+        $('#import').modal('close');
+      }
+    });
+  });
+
   //Export CSV
   $('.export').on('click', function (e) {
 

@@ -5,7 +5,7 @@
 
     This serves as the home screen once a user has logged in
   */
-  
+
   $title = 'Dashboard';
   require_once('includes/app.php');
 
@@ -15,6 +15,7 @@
       block('nav');
     view('dashboard');
       block('add');
+      block('import');
       block('search');
       block('searchbar');
     view('footer');
